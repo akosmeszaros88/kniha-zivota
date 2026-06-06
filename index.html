@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kniha života</title>
+<meta name="description" content="Hotové nápady, čo robiť s dieťaťom. A z každého spoločného momentu sa ti sama poskladá kniha života tvojho dieťaťa." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF6EF; --cream-2:#F4EADd; --ink:#34291F; --ink-soft:#6B5D4F;
+    --terra:#D98A63; --terra-deep:#C36E47; --sage:#8AA081; --gold:#E8B04B;
+    --card:#FFFFFF; --line:#EEE2D4; --shadow:0 18px 40px -22px rgba(80,55,30,.45); --radius:22px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);
+    background:var(--cream);line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.12;letter-spacing:-.01em}
+  .wrap{max-width:680px;margin:0 auto;padding:0 22px}
+  .pill{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--terra-deep);background:#fff;border:1px solid #efdcc9;border-radius:999px;padding:7px 14px}
+
+  /* HERO */
+  .hero{padding:64px 0 54px;text-align:center;background:radial-gradient(120% 90% at 50% -10%, #FFF7EC 0%, var(--cream) 60%)}
+  .hero h1{font-size:clamp(40px,11vw,68px);margin:22px 0 10px;color:var(--ink)}
+  .hero .motto{font-family:'Fraunces',serif;font-size:clamp(20px,5.2vw,27px);font-weight:500;color:var(--terra-deep);font-style:italic;margin-bottom:18px}
+  .hero p.sub{font-size:17px;color:var(--ink-soft);max-width:520px;margin:0 auto 30px}
+
+  /* FORM */
+  form.capture{display:flex;gap:10px;max-width:440px;margin:0 auto;flex-wrap:wrap;justify-content:center}
+  form.capture input[type=email]{flex:1;min-width:210px;padding:15px 18px;border:1.5px solid #e6d4c2;border-radius:14px;
+    font-size:16px;font-family:inherit;background:#fff;color:var(--ink)}
+  form.capture input[type=email]:focus{outline:none;border-color:var(--terra)}
+  .btn{background:var(--terra-deep);color:#fff;border:none;border-radius:14px;padding:15px 24px;font-size:16px;
+    font-weight:600;font-family:inherit;cursor:pointer;transition:transform .12s,background .12s;white-space:nowrap}
+  .btn:hover{background:#b25f3a;transform:translateY(-1px)}
+  .micro{font-size:13px;color:var(--ink-soft);margin-top:14px;max-width:420px;margin-left:auto;margin-right:auto}
+  .formdone{display:none;background:#EFF4EC;border:1px solid #cfe0c6;color:#3f5836;border-radius:14px;padding:16px 18px;
+    max-width:440px;margin:0 auto;font-weight:500}
+
+  /* SECTIONS */
+  section.block{padding:52px 0}
+  .alt{background:var(--cream-2)}
+  h2.title{font-size:clamp(26px,6.5vw,36px);text-align:center;margin-bottom:14px}
+  .lead{text-align:center;color:var(--ink-soft);max-width:540px;margin:0 auto 34px;font-size:16.5px}
+
+  /* TIME CAPSULE */
+  .capsule{background:linear-gradient(160deg,#3a2c20,#52402e);color:#F6ECDD;border-radius:var(--radius);
+    padding:38px 30px;text-align:center;box-shadow:var(--shadow)}
+  .capsule h2{color:#fff;font-size:clamp(24px,6vw,32px);margin-bottom:16px}
+  .capsule p{color:#E7D6C2;font-size:17px;max-width:520px;margin:0 auto}
+  .capsule .em{color:var(--gold);font-weight:600;font-style:italic;font-family:'Fraunces',serif}
+
+  /* PHONE MOCKUP */
+  .mockwrap{display:flex;justify-content:center;margin:6px 0 20px}
+  .mockphone{width:262px;background:#1c140d;border-radius:34px;padding:9px;box-shadow:0 30px 60px -28px rgba(60,40,20,.7)}
+  .mockscreen{background:var(--cream);border-radius:26px;padding:16px 14px}
+  .mtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+  .msmall{font-size:10px;color:var(--ink-soft)}
+  .mname{font-family:'Fraunces',serif;font-weight:600;font-size:15px}
+  .mstar{background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 9px;font-size:11px;font-weight:700;color:var(--terra-deep)}
+  .mtask{background:linear-gradient(150deg,#FFFDF8,#FCEFE0);border:1px solid #F0D9C2;border-radius:16px;padding:13px;margin-bottom:12px}
+  .mlabel{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--terra-deep)}
+  .mtitle{font-family:'Fraunces',serif;font-weight:600;font-size:15px;margin:5px 0 10px}
+  .mbtn{background:var(--terra-deep);color:#fff;text-align:center;border-radius:11px;padding:9px;font-size:12px;font-weight:600}
+  .mbookrow{display:flex;gap:10px}
+  .mphoto{flex:1;height:74px;border-radius:13px;display:grid;place-items:center;font-size:28px;border:1px solid var(--line)}
+  .mocknote{text-align:center;color:var(--ink-soft);font-size:14.5px;max-width:460px;margin:0 auto}
+  .mocknote b{color:var(--ink)}
+
+  /* STEPS */
+  .steps{display:grid;gap:16px}
+  .step{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px;display:flex;gap:16px;align-items:flex-start;box-shadow:var(--shadow)}
+  .step .ic{font-size:30px;line-height:1;flex-shrink:0;width:52px;height:52px;display:grid;place-items:center;background:var(--cream);border-radius:14px}
+  .step h3{font-size:20px;margin-bottom:4px}
+  .step p{color:var(--ink-soft);font-size:15.5px}
+
+  /* WHY grid */
+  .why{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .why .c{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px}
+  .why .c .ic{font-size:24px}
+  .why .c h3{font-size:16.5px;margin:8px 0 4px}
+  .why .c p{font-size:14px;color:var(--ink-soft)}
+
+  /* PRICING */
+  .prices{display:flex;flex-direction:column;gap:14px;max-width:460px;margin:0 auto}
+  .price{position:relative;border:2px solid var(--terra);border-radius:18px;padding:18px 20px;text-align:center;background:#fff;cursor:pointer;transition:.15s;overflow:hidden}
+  .price:hover{background:#FFF7EC;transform:translateY(-1px)}
+  .price .pp{font-weight:600;font-size:16.5px}
+  .price .ps{font-size:14px;color:var(--ink-soft);margin-top:3px}
+  .price.best{border-color:var(--terra-deep);box-shadow:0 14px 30px -18px rgba(195,110,71,.55)}
+  .ribbon{position:absolute;top:14px;right:-36px;transform:rotate(45deg);background:var(--terra-deep);color:#fff;
+    font-size:11px;font-weight:700;padding:4px 42px;letter-spacing:.04em}
+  .pricenote{text-align:center;color:var(--ink-soft);font-size:13.5px;margin-top:18px}
+
+  /* CTA band */
+  .ctaband{background:linear-gradient(150deg,#FFF7EC,#F6E7D5);border:1px solid #f0dcc6;border-radius:var(--radius);padding:34px 26px;text-align:center}
+  .ctaband h2{font-size:27px;margin-bottom:10px}
+  .ctaband p{color:var(--ink-soft);max-width:480px;margin:0 auto 22px;font-size:15.5px}
+
+  /* SURVEY */
+  .survey{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 24px;box-shadow:var(--shadow)}
+  .q{margin-bottom:22px}
+  .q p.qt{font-weight:600;margin-bottom:10px;font-size:16px}
+  .opts{display:flex;flex-direction:column;gap:8px}
+  .opt{display:flex;align-items:center;gap:10px;border:1.5px solid #ecddcd;border-radius:12px;padding:12px 14px;cursor:pointer;font-size:15px;transition:.12s}
+  .opt:hover{border-color:var(--terra)}
+  .opt input{accent-color:var(--terra-deep);width:18px;height:18px}
+  .surveydone{display:none;text-align:center;background:#EFF4EC;border:1px solid #cfe0c6;color:#3f5836;border-radius:14px;padding:18px;font-weight:500}
+
+  footer{padding:40px 0 50px;text-align:center;color:var(--ink-soft);font-size:13.5px}
+  footer .name{font-family:'Fraunces',serif;font-size:18px;color:var(--ink);font-weight:600}
+  .heart{color:var(--terra-deep)}
+  @media(max-width:480px){.why{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="wrap">
+      <span class="pill">Pre rodičov detí od 2 do 6 rokov</span>
+      <h1>Kniha života</h1>
+      <p class="motto">„Detstvo neodložíš. Spomienky áno."</p>
+      <p class="sub">Dáme ti hotové nápady, čo robiť s dieťaťom. A z každého spoločného momentu sa ti sama poskladá kniha života tvojho dieťaťa. Aby ti tie roky neutiekli len tak.</p>
+
+      <form class="capture" id="emailForm">
+        <input type="email" id="email" placeholder="tvoj@email.sk" required />
+        <button class="btn" type="submit">Chcem to vyskúšať medzi prvými</button>
+      </form>
+      <p class="micro" id="emailMicro">Appku ešte len dokončujeme. Nechaj nám email a ozveme sa ti, keď bude hotová. Spam ti posielať nebudeme.</p>
+      <div class="formdone" id="emailDone">Ďakujeme, máme ťa v zozname. Ozveme sa hneď, ako spustíme. 💛</div>
+    </div>
+  </header>
+
+  <!-- TIME CAPSULE -->
+  <section class="block">
+    <div class="wrap">
+      <div class="capsule">
+        <h2>Spomienky, ktoré dieťaťu raz pustíš</h2>
+        <p>Pamätáš si svoj prvý krok? Prvé slovo? My tiež nie, ostalo nám pár čiernobielych fotiek. Tvoje dieťa to môže mať inak. Nahraj, ako prvýkrát povie „mama", a pusti mu to, keď bude mať sedem. Zachyť, ako si prvýkrát samo zoberie lyžičku. Sú to malé chvíle, na ktoré sa inak zabudne. U nás ostanú navždy, ako <span class="em">schránka spomienok</span> pre tvoje dieťa.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT LOOKS -->
+  <section class="block alt">
+    <div class="wrap">
+      <h2 class="title">Takto to vyzerá</h2>
+      <p class="lead">Otvoríš, splníš úlohu, pridáš fotku. Zvyšok spraví appka za teba.</p>
+      <div class="mockwrap">
+        <div class="mockphone">
+          <div class="mockscreen">
+            <div class="mtop">
+              <div><div class="msmall">Dobré ráno 👋</div><div class="mname">Elina kniha</div></div>
+              <div class="mstar">⭐ 24</div>
+            </div>
+            <div class="mtask">
+              <div class="mlabel">Úloha týždňa</div>
+              <div class="mtitle">Nájdite spolu 3 žlté veci</div>
+              <div class="mbtn">Splniť úlohu</div>
+            </div>
+            <div class="mbookrow">
+              <div class="mphoto" style="background:linear-gradient(145deg,#E8F0DF,#D4E4C4)">🌱</div>
+              <div class="mphoto" style="background:linear-gradient(145deg,#FBE3CE,#F6CFB2)">🎨</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="mocknote">A pekná drobnosť: appka sa oblečie do farieb tvojho dieťatka. <b>Pre dievčatko jemná a teplá, pre chlapca modrozelená.</b></p>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="block">
+    <div class="wrap">
+      <h2 class="title">Ako to funguje</h2>
+      <p class="lead">Žiadne hľadanie na internete. Žiadne lepenie fotiek po nociach. Stačí žiť s dieťaťom.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="ic">🎯</div>
+          <div><h3>1. Dostaneš nápad</h3><p>Párkrát do týždňa ti pošleme jednoduchú aktivitu z vecí, čo máš doma. Napríklad nájdite tri žlté veci alebo zasaďte semienko. Nič nevymýšľaš.</p></div>
+        </div>
+        <div class="step">
+          <div class="ic">📸</div>
+          <div><h3>2. Splníte to spolu</h3><p>Spravíte ju spolu, odklikneš a pridáš fotku alebo video. Dieťa za to zbiera hviezdičky a hneď pýta ďalšiu.</p></div>
+        </div>
+        <div class="step">
+          <div class="ic">📖</div>
+          <div><h3>3. Ostane vám spomienka</h3><p>Každá splnená úloha sa sama uloží do knihy života. O rok budeš mať poklad. O desať rokov niečo, čo sa nedá kúpiť.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHY -->
+  <section class="block alt">
+    <div class="wrap">
+      <h2 class="title">Prečo to rodičia chcú</h2>
+      <div class="why">
+        <div class="c"><div class="ic">🧠</div><h3>Nemusíš nič vymýšľať</h3><p>Koniec pocitu, že musíš stále vyťahovať nové hry, aby sa dieťa nenudilo.</p></div>
+        <div class="c"><div class="ic">🔒</div><h3>Nič sa nestratí</h3><p>Aj keby si prišla o telefón, spomienky ostanú u nás v bezpečí.</p></div>
+        <div class="c"><div class="ic">👨‍👩‍👧</div><h3>Celá rodina pri tom</h3><p>Otec aj babka môžu pridávať svoje fotky. Ty rozhoduješ, kto čo uvidí.</p></div>
+        <div class="c"><div class="ic">🎁</div><h3>Na konci kniha do ruky</h3><p>Z roka spomienok ti spravíme krásnu tlačenú knihu a pošleme ju domov.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="block">
+    <div class="wrap">
+      <h2 class="title">Koľko to bude stáť</h2>
+      <p class="lead">Vyskúšaš ju zadarmo. Platíš až vtedy, keď ti naozaj sadne. Klikni na plán, ktorý by ti sedel.</p>
+      <div class="prices">
+        <div class="price best" onclick="pickPlan('rocne')">
+          <div class="ribbon">Výhodné</div>
+          <div class="pp">7 dní zadarmo</div>
+          <div class="ps">potom 29,99 € / rok</div>
+        </div>
+        <div class="price" onclick="pickPlan('mesacne')">
+          <div class="pp">3 dni zadarmo</div>
+          <div class="ps">potom 4,99 € / mesiac</div>
+        </div>
+        <div class="price" onclick="pickPlan('dozivotne')">
+          <div class="pp">Doživotné predplatné</div>
+          <div class="ps">89,99 € jednorazovo</div>
+        </div>
+      </div>
+      <p class="pricenote">Tlačenú knihu spomienok na konci roka si vieš doobjednať zvlášť.</p>
+    </div>
+  </section>
+
+  <!-- SURVEY -->
+  <section class="block alt">
+    <div class="wrap">
+      <h2 class="title">Pomôž nám to spraviť dobre</h2>
+      <p class="lead">Stačí pol minúty. Podľa tvojich odpovedí sa rozhodneme, čo spravíme ako prvé.</p>
+      <form class="survey" id="surveyForm">
+        <div class="q">
+          <p class="qt">Tvoj email</p>
+          <input type="email" id="surveyEmail" required placeholder="tvoj@email.sk" style="width:100%;padding:13px 14px;border:1.5px solid #ecddcd;border-radius:12px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink)" />
+        </div>
+        <div class="q">
+          <p class="qt">1. Stiahla by si si takúto appku?</p>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q1" value="urcite"> Určite áno</label>
+            <label class="opt"><input type="radio" name="q1" value="mozno"> Možno</label>
+            <label class="opt"><input type="radio" name="q1" value="nie"> Asi nie</label>
+          </div>
+        </div>
+        <div class="q">
+          <p class="qt">2. Čo ťa láka najviac?</p>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q2" value="aktivity"> Hotové nápady na aktivity</label>
+            <label class="opt"><input type="radio" name="q2" value="kniha"> Kniha života na jednom mieste</label>
+            <label class="opt"><input type="radio" name="q2" value="kapsula"> Schránka spomienok pre dieťa</label>
+          </div>
+        </div>
+        <div class="q">
+          <p class="qt">3. Koľko by si za to dala mesačne?</p>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="q3" value="0"> Len keď je zadarmo</label>
+            <label class="opt"><input type="radio" name="q3" value="3"> Do 3 €</label>
+            <label class="opt"><input type="radio" name="q3" value="35"> 3 až 5 €</label>
+            <label class="opt"><input type="radio" name="q3" value="5+"> Viac ako 5 €</label>
+          </div>
+        </div>
+        <button class="btn" type="submit" style="width:100%">Odoslať</button>
+        <div class="surveydone" id="surveyDone" style="margin-top:16px">Ďakujeme, že nám pomáhaš. 💛</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- CLOSING CTA -->
+  <section class="block">
+    <div class="wrap">
+      <div class="ctaband">
+        <h2>Buď pri tom od začiatku</h2>
+        <p>Sme malý slovenský tím a appku staviame s láskou. Kto sa prihlási teraz, vyskúša ju ako jeden z prvých, ešte kým je zadarmo.</p>
+        <form class="capture" id="emailForm2">
+          <input type="email" id="email2" placeholder="tvoj@email.sk" required />
+          <button class="btn" type="submit">Daj mi vedieť pri spustení</button>
+        </form>
+        <div class="formdone" id="emailDone2" style="margin-top:14px">Ďakujeme, ozveme sa ti. 💛</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="name">Kniha života</div>
+      <p style="margin-top:8px">Robíme to s <span class="heart">♥</span> na Slovensku. Práve pripravujeme.</p>
+    </div>
+  </footer>
+
+<script>
+  // POZN.: na ostro napojiť odoslanie na Google Sheet cez n8n webhook (Ákosova doména).
+  // Zatiaľ ukladáme lokálne, aby stránka fungovala na klik a dala sa otestovať.
+  function store(key, data){
+    try{ const a = JSON.parse(localStorage.getItem(key)||'[]'); a.push({...data, ts:new Date().toISOString()}); localStorage.setItem(key, JSON.stringify(a)); }catch(e){}
+  }
+  function handle(formId, fields, doneId, hideIds){
+    const f = document.getElementById(formId);
+    if(!f) return;
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      const data = {};
+      fields.forEach(fn=>{
+        if(fn.radio){ const sel = f.querySelector('input[name="'+fn.name+'"]:checked'); data[fn.name] = sel?sel.value:null; }
+        else { data[fn.id] = document.getElementById(fn.id).value; }
+      });
+      store(formId, data);
+      (hideIds||[]).forEach(id=>{const el=document.getElementById(id); if(el) el.style.display='none';});
+      f.style.display='none';
+      const d = document.getElementById(doneId); if(d) d.style.display='block';
+    });
+  }
+  handle('emailForm', [{id:'email'}], 'emailDone', ['emailMicro']);
+  handle('emailForm2', [{id:'email2'}], 'emailDone2', []);
+  handle('surveyForm', [{id:'surveyEmail'},{name:'q1',radio:true},{name:'q2',radio:true},{name:'q3',radio:true}], 'surveyDone', []);
+
+  // klik na cenový plán = silný signál záujmu, uložíme a pošleme na zber emailu
+  function pickPlan(plan){
+    store('planClicks', {plan:plan});
+    var sec = document.getElementById('emailForm2');
+    if(sec){
+      sec.scrollIntoView({behavior:'smooth', block:'center'});
+      var inp = document.getElementById('email2');
+      if(inp) setTimeout(function(){ inp.focus(); }, 450);
+    }
+  }
+</script>
+</body>
+</html>

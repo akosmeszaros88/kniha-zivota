@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kniha života · ukážka appky</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF6EF; --ink:#34291F; --ink-soft:#7A6B5B; --gold:#E8B04B;
+    --sage:#8AA081; --line:#EEE2D4; --card:#fff;
+    /* accent + tints sa menia podľa pohlavia (.theme-girl / .theme-boy) */
+  }
+  body.theme-girl{
+    --accent:#D98A63; --accent-deep:#C36E47;
+    --ava1:#FBE3CE; --ava2:#F3CDAE; --soft1:#FFFDF8; --soft2:#FCEFE0;
+    --softborder:#F0D9C2; --tint:#FBE3CE;
+    --bg1:#efe3d4; --bg2:#e7d8c6; --bgglow:#FFF7EC;
+  }
+  body.theme-boy{
+    --accent:#5B9FA6; --accent-deep:#3E7E86;
+    --ava1:#D7ECEC; --ava2:#B6DAD9; --soft1:#FBFEFE; --soft2:#E6F2F1;
+    --softborder:#CFE6E5; --tint:#D7ECEC;
+    --bg1:#dfe9e6; --bg2:#cdded9; --bgglow:#EEF8F6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Inter',system-ui,sans-serif;color:var(--ink);
+    background:
+      radial-gradient(60% 50% at 50% 0%, var(--bgglow) 0%, transparent 70%),
+      linear-gradient(160deg,var(--bg1),var(--bg2));
+    min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:18px 12px;gap:12px;transition:background .4s ease}
+  .tagline{font-family:'Fraunces',serif;color:#6b5640;text-align:center}
+  .tagline b{display:block;font-size:20px;color:var(--ink)}
+  .tagline span{font-size:13px;color:#8a7660}
+
+  /* SEGMENT TOGGLE */
+  .seg{display:flex;gap:4px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px;box-shadow:0 8px 20px -16px rgba(80,55,30,.6)}
+  .seg button{border:none;background:none;font-family:inherit;font-size:13px;font-weight:600;color:var(--ink-soft);
+    padding:8px 16px;border-radius:999px;cursor:pointer;transition:.2s}
+  .seg button.on{background:var(--accent-deep);color:#fff}
+
+  /* PHONE */
+  .phone{width:390px;max-width:100%;height:790px;max-height:84vh;background:#1c140d;border-radius:46px;
+    padding:11px;box-shadow:0 40px 80px -30px rgba(60,40,20,.7), 0 0 0 2px rgba(255,255,255,.06) inset;position:relative}
+  .screen{width:100%;height:100%;background:var(--cream);border-radius:36px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:130px;height:26px;background:#1c140d;border-radius:0 0 16px 16px;z-index:50}
+
+  /* TOP BAR */
+  .topbar{padding:30px 18px 12px;display:flex;align-items:center;justify-content:space-between;
+    background:linear-gradient(180deg,var(--bgglow), var(--cream));flex-shrink:0}
+  .topbar .hi{font-size:13px;color:var(--ink-soft)}
+  .topbar .hi b{display:block;font-family:'Fraunces',serif;font-size:18px;color:var(--ink);font-weight:600}
+  .stars{background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 13px;font-weight:700;font-size:14px;color:var(--accent-deep);display:flex;gap:5px;align-items:center}
+  .stars.bump{animation:bump .5s ease}
+  @keyframes bump{0%,100%{transform:scale(1)}30%{transform:scale(1.22)}60%{transform:scale(.96)}}
+
+  /* SCROLL AREA */
+  .body{flex:1;overflow-y:auto;padding:6px 16px 90px}
+  .body::-webkit-scrollbar{display:none}
+  .view{display:none}
+  .view.active{display:block;animation:slidein .32s cubic-bezier(.2,.7,.3,1)}
+  @keyframes slidein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .h{font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin:10px 2px 12px}
+  .sub{font-size:13px;color:var(--ink-soft);margin:-6px 2px 14px}
+
+  /* CARDS */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:16px;margin-bottom:14px;box-shadow:0 12px 26px -20px rgba(80,55,30,.5)}
+  .kid{display:flex;gap:13px;align-items:center}
+  .ava{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:26px;
+    background:linear-gradient(145deg,var(--ava1),var(--ava2));flex-shrink:0;transition:.4s}
+  .kid .nm{font-family:'Fraunces',serif;font-weight:600;font-size:18px}
+  .kid .age{font-size:12.5px;color:var(--ink-soft)}
+
+  .task{background:linear-gradient(150deg,var(--soft1),var(--soft2));border:1px solid var(--softborder);transition:.4s}
+  .task.swap{animation:swap .4s ease}
+  @keyframes swap{0%{opacity:.3;transform:scale(.98)}100%{opacity:1;transform:none}}
+  .label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-deep)}
+  .task h3{font-family:'Fraunces',serif;font-size:20px;font-weight:600;margin:7px 0 5px}
+  .task p{font-size:13.5px;color:var(--ink-soft);margin-bottom:14px}
+  .meta{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+  .chip{font-size:11.5px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:5px 10px;color:var(--ink-soft)}
+
+  .btn{display:block;width:100%;background:var(--accent-deep);color:#fff;border:none;border-radius:15px;
+    padding:14px;font-size:15px;font-weight:600;font-family:inherit;cursor:pointer;transition:transform .12s,filter .12s}
+  .btn:active{transform:scale(.97)}
+  .btn:hover{filter:brightness(1.05)}
+  .btn.ghost{background:#fff;color:var(--accent-deep);border:1.5px solid var(--softborder)}
+  .btn.sage{background:var(--sage)}
+
+  .statrow{display:flex;gap:10px;margin-bottom:14px}
+  .stat{flex:1;background:#fff;border:1px solid var(--line);border-radius:18px;padding:13px;text-align:center}
+  .stat b{font-family:'Fraunces',serif;font-size:22px;display:block;color:var(--accent-deep)}
+  .stat span{font-size:11.5px;color:var(--ink-soft)}
+
+  /* BOOK timeline */
+  .entry{display:flex;gap:12px;margin-bottom:14px}
+  .eline{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+  .edot{width:11px;height:11px;border-radius:50%;background:var(--accent);margin-top:6px;transition:.4s}
+  .ebar{width:2px;flex:1;background:var(--line);margin-top:4px}
+  .ecard{flex:1;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 10px 22px -20px rgba(80,55,30,.5)}
+  .ephoto{height:120px;display:grid;place-items:center;font-size:46px}
+  .ebody{padding:11px 13px}
+  .ebody .ed{font-size:11px;color:var(--ink-soft);margin-bottom:2px}
+  .ebody .et{font-family:'Fraunces',serif;font-size:15.5px;font-weight:600}
+  .new{animation:pop .55s ease}
+  @keyframes pop{0%{opacity:0;transform:scale(.85)}55%{transform:scale(1.03)}100%{opacity:1;transform:scale(1)}}
+
+  /* CAPSULE */
+  .cap{background:linear-gradient(160deg,#3a2c20,#52402e);color:#F6ECDD;border-radius:22px;padding:18px;margin-bottom:14px}
+  .cap .label{color:var(--gold)}
+  .cap h3{font-family:'Fraunces',serif;font-size:18px;margin:6px 0 4px;color:#fff}
+  .cap p{font-size:12.5px;color:#E2D2BE}
+  .milestone{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:11px}
+  .milestone .mi{width:42px;height:42px;border-radius:12px;background:var(--tint);display:grid;place-items:center;font-size:20px;flex-shrink:0;transition:.4s}
+  .milestone .mt{font-weight:600;font-size:14px}
+  .milestone .ms{font-size:11.5px;color:var(--ink-soft)}
+  .play{margin-left:auto;width:34px;height:34px;border-radius:50%;background:var(--accent-deep);color:#fff;display:grid;place-items:center;font-size:13px;flex-shrink:0;cursor:pointer}
+  .sealed{opacity:.75}
+  .sealed .mi{background:#EDE3D6}
+  .sealed .play{background:#cbb8a3}
+
+  /* FAMILY */
+  .fm{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:11px}
+  .fm .fa{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-size:20px;background:linear-gradient(145deg,var(--ava1),var(--ava2));flex-shrink:0;transition:.4s}
+  .fm .fn{font-weight:600;font-size:14px}
+  .fm .fr{font-size:11.5px;color:var(--ink-soft)}
+  .tag{margin-left:auto;font-size:10.5px;font-weight:600;padding:4px 9px;border-radius:999px}
+  .tag.all{background:#E7F0E2;color:#5d7d4f}
+  .tag.some{background:var(--tint);color:var(--accent-deep)}
+
+  /* BOTTOM NAV */
+  .nav{position:absolute;bottom:0;left:0;right:0;height:74px;background:#FFFCF7;
+    border-top:1px solid var(--line);display:flex;padding-bottom:8px}
+  .nav button{flex:1;background:none;border:none;display:flex;flex-direction:column;align-items:center;gap:3px;
+    padding-top:12px;cursor:pointer;color:#b3a594;font-family:inherit;transition:color .2s}
+  .nav button .ni{font-size:20px}
+  .nav button .nl{font-size:10.5px;font-weight:600}
+  .nav button.on{color:var(--accent-deep)}
+
+  /* MODAL */
+  .ov{position:absolute;inset:0;background:rgba(40,28,18,.55);display:none;align-items:flex-end;z-index:100;border-radius:36px;overflow:hidden}
+  .ov.show{display:flex;animation:fadein .2s}
+  @keyframes fadein{from{opacity:0}to{opacity:1}}
+  .sheet{background:var(--cream);width:100%;border-radius:28px 28px 36px 36px;padding:22px 18px 30px;animation:up .32s cubic-bezier(.2,.7,.3,1)}
+  @keyframes up{from{transform:translateY(80px)}to{transform:none}}
+  .grab{width:42px;height:5px;background:#dcc9b5;border-radius:9px;margin:0 auto 16px}
+  .sheet h3{font-family:'Fraunces',serif;font-size:21px;margin-bottom:4px}
+  .sheet p.d{font-size:13.5px;color:var(--ink-soft);margin-bottom:16px}
+  .photobox{height:150px;border:2px dashed var(--softborder);border-radius:18px;display:grid;place-items:center;
+    color:var(--accent-deep);font-size:14px;cursor:pointer;margin-bottom:14px;text-align:center;background:#fff;transition:.2s}
+  .photobox.filled{border-style:solid;border-color:transparent;font-size:62px;background:linear-gradient(145deg,var(--soft1),var(--soft2))}
+
+  /* TOAST + CONFETTI */
+  .toast{position:absolute;bottom:88px;left:16px;right:16px;background:#34291F;color:#fff;border-radius:15px;
+    padding:13px 16px;font-size:13.5px;font-weight:500;text-align:center;z-index:120;opacity:0;transform:translateY(10px);transition:.3s}
+  .toast.show{opacity:1;transform:none}
+  .conf{position:absolute;font-size:22px;z-index:130;pointer-events:none;animation:rise 1.2s ease forwards}
+  @keyframes rise{0%{opacity:0;transform:translateY(0) scale(.5)}18%{opacity:1}100%{opacity:0;transform:translateY(-240px) scale(1.2) rotate(40deg)}}
+
+  @media(max-width:430px){.phone{height:84vh;border-radius:38px}}
+</style>
+</head>
+<body class="theme-girl">
+  <div class="tagline"><b>Kniha života</b><span>ukážka appky · klikateľná</span></div>
+
+  <div class="seg">
+    <button id="segGirl" class="on" onclick="setTheme('girl')">👧 Dievčatko</button>
+    <button id="segBoy" onclick="setTheme('boy')">👦 Chlapček</button>
+  </div>
+
+  <div class="phone">
+    <div class="screen">
+      <div class="notch"></div>
+
+      <!-- TOP BAR -->
+      <div class="topbar">
+        <div class="hi">Dobré ráno 👋<b id="tbName">Elina kniha</b></div>
+        <div class="stars" id="starsPill">⭐ <span id="starCount">24</span></div>
+      </div>
+
+      <!-- SCROLL BODY -->
+      <div class="body" id="scrollBody">
+
+        <!-- DOMOV -->
+        <div class="view active" id="v-home">
+          <div class="card kid">
+            <div class="ava" id="pAva">👧</div>
+            <div><div class="nm" id="pName">Ela</div><div class="age" id="pAge">3 roky 2 mesiace</div></div>
+          </div>
+
+          <div class="card task" id="taskCard">
+            <span class="label">Úloha týždňa</span>
+            <h3 id="taskTitle">Nájdite spolu 3 žlté veci</h3>
+            <p id="taskDesc">Prejdite sa po byte alebo vonku a hľadajte žlté veci. Pomenujte ich nahlas, je to skvelé na slovnú zásobu aj farby.</p>
+            <div class="meta">
+              <span class="chip" id="taskTime">⏱️ 10 min</span>
+              <span class="chip" id="taskPlace">🏠 Doma</span>
+              <span class="chip">⭐ +3</span>
+            </div>
+            <button class="btn" onclick="openTask()">Splniť úlohu</button>
+          </div>
+
+          <div class="statrow">
+            <div class="stat"><b id="doneCount">7</b><span>splnených úloh</span></div>
+            <div class="stat"><b id="memCount">12</b><span>spomienok</span></div>
+          </div>
+
+          <div class="card" style="text-align:center;background:linear-gradient(150deg,#fff,#F6EFE6)">
+            <div style="font-size:13.5px;color:var(--ink-soft);margin-bottom:10px">💡 Zachytil si dnes niečo výnimočné?</div>
+            <button class="btn ghost" onclick="go('capsule')">Pridať míľnik do schránky</button>
+          </div>
+        </div>
+
+        <!-- KNIHA -->
+        <div class="view" id="v-book">
+          <div class="h">Kniha života</div>
+          <div class="sub" id="bookSub">Každý moment Ely, pekne po poriadku.</div>
+          <div id="timeline">
+            <div class="entry"><div class="eline"><div class="edot"></div><div class="ebar"></div></div>
+              <div class="ecard"><div class="ephoto" style="background:linear-gradient(145deg,#E8F0DF,#D4E4C4)">🌱</div>
+              <div class="ebody"><div class="ed">pred 3 dňami</div><div class="et">Zasadili sme semienko</div></div></div></div>
+
+            <div class="entry"><div class="eline"><div class="edot"></div><div class="ebar"></div></div>
+              <div class="ecard"><div class="ephoto" style="background:linear-gradient(145deg,#FBE3CE,#F6CFB2)">🎨</div>
+              <div class="ebody"><div class="ed">pred 6 dňami</div><div class="et">Prvá maľovačka prstami</div></div></div></div>
+
+            <div class="entry"><div class="eline"><div class="edot"></div><div class="ebar"></div></div>
+              <div class="ecard"><div class="ephoto" style="background:linear-gradient(145deg,#E3ECF5,#CBDDF0)">🏡</div>
+              <div class="ebody"><div class="ed">pred 12 dňami</div><div class="et">Výlet k babke Elene</div></div></div></div>
+
+            <div class="entry"><div class="eline"><div class="edot"></div></div>
+              <div class="ecard"><div class="ephoto" style="background:linear-gradient(145deg,#F5E6C8,#EBD29B)">🦆</div>
+              <div class="ebody"><div class="ed">pred 18 dňami</div><div class="et">Kŕmili sme kačky v parku</div></div></div></div>
+          </div>
+          <button class="btn sage" onclick="toast('📦 Pripravíme tlačenú knihu a pošleme domov.')">🎁 Vytvoriť tlačenú knihu</button>
+        </div>
+
+        <!-- SCHRÁNKA -->
+        <div class="view" id="v-capsule">
+          <div class="h">Časová schránka</div>
+          <div class="sub" id="capSub">Spomienky, ktoré Eli raz pustíš.</div>
+
+          <div class="cap">
+            <span class="label">Zapečatený odkaz</span>
+            <h3 id="capSeal">List pre Elu na 7. narodeniny</h3>
+            <p>Otvorí sa o 3 roky a 8 mesiacov. Video od mamy a otca. 🔒</p>
+          </div>
+
+          <div class="milestone"><div class="mi">🎤</div><div><div class="mt">Prvé slovo: „mama"</div><div class="ms">14. 2. 2025 · audio 0:06</div></div><div class="play" onclick="toast('▶ Prehrávam nahrávku…')">▶</div></div>
+          <div class="milestone"><div class="mi">👣</div><div><div class="mt">Prvý krok</div><div class="ms">3. 4. 2025 · video 0:12</div></div><div class="play" onclick="toast('▶ Prehrávam video…')">▶</div></div>
+          <div class="milestone"><div class="mi">🥄</div><div><div class="mt">Prvýkrát jedlo samo</div><div class="ms">20. 5. 2025 · video 0:09</div></div><div class="play" onclick="toast('▶ Prehrávam video…')">▶</div></div>
+          <div class="milestone sealed"><div class="mi">💌</div><div><div class="mt">Odkaz na 7. narodeniny</div><div class="ms">zapečatené do r. 2029</div></div><div class="play">🔒</div></div>
+
+          <button class="btn" onclick="toast('🎥 Nahraj video alebo audio, uložíme ho bezpečne.')">+ Pridať míľnik</button>
+        </div>
+
+        <!-- RODINA -->
+        <div class="view" id="v-family">
+          <div class="h">Rodina</div>
+          <div class="sub">Prispievajte spolu. Ty rozhoduješ, čo kto vidí.</div>
+
+          <div class="fm"><div class="fa">👩</div><div><div class="fn">Ty (mama)</div><div class="fr">správca</div></div><span class="tag all">všetko</span></div>
+          <div class="fm"><div class="fa">👨</div><div><div class="fn">Otato</div><div class="fr">prispieva</div></div><span class="tag all">všetko</span></div>
+          <div class="fm"><div class="fa">👵</div><div><div class="fn">Babka Elena</div><div class="fr">pozerá</div></div><span class="tag some">len zdieľané</span></div>
+
+          <button class="btn ghost" onclick="toast('✉️ Pošleme pozvánku cez rodinné heslo.')">+ Pozvať člena rodiny</button>
+          <p style="font-size:12px;color:var(--ink-soft);text-align:center;margin-top:14px">🔒 Spomienky držíme bezpečne. Aj keby si stratila telefón, zostanú.</p>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM NAV -->
+      <div class="nav">
+        <button class="on" id="n-home" onclick="go('home')"><span class="ni">🏠</span><span class="nl">Domov</span></button>
+        <button id="n-book" onclick="go('book')"><span class="ni">📖</span><span class="nl">Kniha</span></button>
+        <button id="n-capsule" onclick="go('capsule')"><span class="ni">⏳</span><span class="nl">Schránka</span></button>
+        <button id="n-family" onclick="go('family')"><span class="ni">👨‍👩‍👧</span><span class="nl">Rodina</span></button>
+      </div>
+
+      <!-- TOAST -->
+      <div class="toast" id="toast"></div>
+
+      <!-- TASK MODAL -->
+      <div class="ov" id="ov">
+        <div class="sheet">
+          <div class="grab"></div>
+          <h3 id="modalTitle">Nájdite spolu 3 žlté veci</h3>
+          <p class="d">Splnili ste to? Pridaj fotku na pamiatku, uloží sa do knihy života. 💛</p>
+          <div class="photobox" id="photobox" onclick="addPhoto()">📷 Pridať fotku</div>
+          <button class="btn" id="finishBtn" onclick="finishTask()" style="opacity:.5;pointer-events:none">Hotovo! Uložiť spomienku</button>
+          <button class="btn ghost" style="margin-top:10px" onclick="closeTask()">Zatvoriť</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="tagline"><span>Prepni 👧 / 👦 hore · ťukaj na „Splniť úlohu" 👆</span></div>
+
+<script>
+  /* ---- DETI (motív podľa pohlavia) ---- */
+  const GIRL={emoji:'👧', name:'Ela', age:'3 roky 2 mesiace', poss:'Elina', gen:'Ely', dat:'Eli', acc:'Elu'};
+  const BOY ={emoji:'👦', name:'Maťko', age:'3 roky 4 mesiace', poss:'Maťkova', gen:'Maťka', dat:'Maťkovi', acc:'Maťka'};
+  function setTheme(g){
+    document.body.className='theme-'+g;
+    document.getElementById('segGirl').classList.toggle('on', g==='girl');
+    document.getElementById('segBoy').classList.toggle('on', g==='boy');
+    const c = g==='girl'?GIRL:BOY;
+    document.getElementById('pAva').textContent=c.emoji;
+    document.getElementById('pName').textContent=c.name;
+    document.getElementById('pAge').textContent=c.age;
+    document.getElementById('tbName').textContent=c.poss+' kniha';
+    document.getElementById('bookSub').textContent='Každý moment '+c.gen+', pekne po poriadku.';
+    document.getElementById('capSub').textContent='Spomienky, ktoré '+c.dat+' raz pustíš.';
+    document.getElementById('capSeal').textContent='List pre '+c.acc+' na 7. narodeniny';
+  }
+
+  /* ---- ÚLOHY (pool) ---- */
+  const TASKS=[
+    {t:'Nájdite spolu 3 žlté veci', d:'Prejdite sa po byte alebo vonku a hľadajte žlté veci. Pomenujte ich nahlas, je to skvelé na slovnú zásobu aj farby.', time:'⏱️ 10 min', place:'🏠 Doma', photo:'💛', grad:'#FFF1D6,#F7DD9F', cap:'Našli sme tri žlté veci'},
+    {t:'Zasaďte spolu semienko', d:'Do téglika zasaďte semienko a každý týždeň ho odfoťte, uvidíte, ako rastie spolu s dieťaťom.', time:'⏱️ 15 min', place:'🏠 Doma', photo:'🌱', grad:'#E8F0DF,#D4E4C4', cap:'Zasadili sme semienko'},
+    {t:'Nazbierajte 5 rôznych lístkov', d:'Na prechádzke v parku nájdite päť rôznych lístkov. Doma ich môžete obkresliť alebo nalepiť.', time:'⏱️ 20 min', place:'🌳 Vonku', photo:'🍂', grad:'#F3E6CF,#E7C99A', cap:'Nazbierali sme lístky'},
+    {t:'Postavte bunker z vankúšov', d:'Z vankúšov a deky postavte domček a spravte si v ňom malý piknik s knižkou.', time:'⏱️ 15 min', place:'🏠 Doma', photo:'🏰', grad:'#EDE6F5,#D9C9EC', cap:'Postavili sme bunker'},
+    {t:'Navštívte babku', d:'Choďte k babke a nech porozpráva, aké to bolo, keď bola malá. Nahrajte kúsok rozprávania do schránky.', time:'⏱️ 1 hod', place:'👵 Rodina', photo:'🏡', grad:'#E3ECF5,#CBDDF0', cap:'Boli sme u babky'},
+    {t:'Nakreslite spolu rodinu', d:'Vezmite pastelky a nakreslite celú rodinu. Hotový obrázok odfoťte do knihy.', time:'⏱️ 15 min', place:'🏠 Doma', photo:'🎨', grad:'#FBE3CE,#F6CFB2', cap:'Nakreslili sme rodinu'},
+    {t:'Naučte sa „Hello!" po anglicky', d:'Naučte dieťa pozdraviť po anglicky. Nahrajte, ako to prvýkrát povie, je to krásny míľnik.', time:'⏱️ 5 min', place:'📚 Učenie', photo:'🗣️', grad:'#FFF1D6,#F7DD9F', cap:'Prvé anglické slovo'}
+  ];
+  let ti=0;
+  function renderTask(animate){
+    const t=TASKS[ti];
+    document.getElementById('taskTitle').textContent=t.t;
+    document.getElementById('taskDesc').textContent=t.d;
+    document.getElementById('taskTime').textContent=t.time;
+    document.getElementById('taskPlace').textContent=t.place;
+    document.getElementById('modalTitle').textContent=t.t;
+    if(animate){const c=document.getElementById('taskCard');c.classList.remove('swap');void c.offsetWidth;c.classList.add('swap');}
+  }
+
+  /* ---- NAVIGÁCIA ---- */
+  const views=['home','book','capsule','family'];
+  function go(v){
+    views.forEach(x=>{
+      document.getElementById('v-'+x).classList.toggle('active', x===v);
+      document.getElementById('n-'+x).classList.toggle('on', x===v);
+    });
+    document.getElementById('scrollBody').scrollTop=0;
+  }
+
+  /* ---- ÚLOHA: splnenie ---- */
+  function openTask(){ document.getElementById('ov').classList.add('show'); }
+  function closeTask(){ document.getElementById('ov').classList.remove('show'); }
+  let photoAdded=false;
+  function addPhoto(){
+    const pb=document.getElementById('photobox');
+    pb.classList.add('filled'); pb.textContent=TASKS[ti].photo;
+    document.getElementById('finishBtn').style.opacity='1';
+    document.getElementById('finishBtn').style.pointerEvents='auto';
+    photoAdded=true;
+  }
+  function confetti(){
+    const screen=document.querySelector('.screen');
+    const icons=['⭐','✨','💛','🌟'];
+    for(let i=0;i<14;i++){
+      const c=document.createElement('div'); c.className='conf'; c.textContent=icons[i%4];
+      c.style.left=(20+Math.random()*60)+'%'; c.style.top=(42+Math.random()*18)+'%';
+      c.style.animationDelay=(Math.random()*.3)+'s';
+      screen.appendChild(c); setTimeout(()=>c.remove(),1500);
+    }
+  }
+  function toast(msg){
+    const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+    clearTimeout(window._tt); window._tt=setTimeout(()=>t.classList.remove('show'),2600);
+  }
+  function finishTask(){
+    if(!photoAdded) return;
+    const task=TASKS[ti];
+    closeTask();
+    // +3 hviezdičky (s bounce)
+    const sc=document.getElementById('starCount'); sc.textContent=parseInt(sc.textContent)+3;
+    const sp=document.getElementById('starsPill'); sp.classList.remove('bump'); void sp.offsetWidth; sp.classList.add('bump');
+    document.getElementById('doneCount').textContent=parseInt(document.getElementById('doneCount').textContent)+1;
+    document.getElementById('memCount').textContent=parseInt(document.getElementById('memCount').textContent)+1;
+    // pridaj spomienku do knihy (navrch)
+    const tl=document.getElementById('timeline');
+    const e=document.createElement('div'); e.className='entry new';
+    e.innerHTML='<div class="eline"><div class="edot"></div><div class="ebar"></div></div>'+
+      '<div class="ecard"><div class="ephoto" style="background:linear-gradient(145deg,'+task.grad+')">'+task.photo+'</div>'+
+      '<div class="ebody"><div class="ed">dnes</div><div class="et">'+task.cap+'</div></div></div>';
+    tl.insertBefore(e, tl.firstChild);
+    confetti();
+    // ďalšia úloha
+    ti=(ti+1)%TASKS.length; renderTask(true);
+    // reset modálu
+    photoAdded=false; const pb=document.getElementById('photobox');
+    pb.classList.remove('filled'); pb.textContent='📷 Pridať fotku';
+    document.getElementById('finishBtn').style.opacity='.5';
+    document.getElementById('finishBtn').style.pointerEvents='none';
+    // ukáž výsledok v knihe
+    setTimeout(()=>{ go('book'); toast('🎉 +3 hviezdičky · pribudlo do knihy života!'); }, 650);
+  }
+
+  /* init */
+  setTheme('girl');
+  renderTask(false);
+</script>
+</body>
+</html>
