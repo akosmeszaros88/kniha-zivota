@@ -297,38 +297,63 @@
   </footer>
 
 <script>
-  // POZN.: na ostro napojiť odoslanie na Google Sheet cez n8n webhook (Ákosova doména).
-  // Zatiaľ ukladáme lokálne, aby stránka fungovala na klik a dala sa otestovať.
-  function store(key, data){
-    try{ const a = JSON.parse(localStorage.getItem(key)||'[]'); a.push({...data, ts:new Date().toISOString()}); localStorage.setItem(key, JSON.stringify(a)); }catch(e){}
+  var WEBHOOK = 'https://akosmeszaros88.app.n8n.cloud/webhook/kniha-zivota-zber';
+
+  // odoslanie na n8n webhook (fire-and-forget, bez CORS problemov)
+  function send(data){
+    try { fetch(WEBHOOK, { method:'POST', mode:'no-cors', body:new URLSearchParams(data) }); } catch(e){}
   }
-  function handle(formId, fields, doneId, hideIds){
-    const f = document.getElementById(formId);
-    if(!f) return;
+
+  // preklad kodov na citatelne hodnoty do Sheetu
+  var MAP = {
+    q1: { urcite:'Určite áno', mozno:'Možno', nie:'Asi nie' },
+    q2: { aktivity:'Hotové nápady na aktivity', kniha:'Kniha života na jednom mieste', kapsula:'Schránka spomienok pre dieťa' },
+    q3: { '0':'Len keď je zadarmo', '3':'Do 3 €', '35':'3 až 5 €', '5+':'Viac ako 5 €' },
+    plan: { rocne:'Ročne (29,99 €/rok)', mesacne:'Mesačne (4,99 €/mes)', dozivotne:'Doživotne (89,99 € jednorazovo)' }
+  };
+  function lbl(group, val){ return (MAP[group] && MAP[group][val]) || val || ''; }
+
+  function done(formId, doneId, hideIds){
+    (hideIds||[]).forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
+    var f=document.getElementById(formId); if(f) f.style.display='none';
+    var d=document.getElementById(doneId); if(d) d.style.display='block';
+  }
+
+  function onEmail(formId, inputId, doneId, hideIds, zdroj){
+    var f=document.getElementById(formId); if(!f) return;
     f.addEventListener('submit', function(e){
       e.preventDefault();
-      const data = {};
-      fields.forEach(fn=>{
-        if(fn.radio){ const sel = f.querySelector('input[name="'+fn.name+'"]:checked'); data[fn.name] = sel?sel.value:null; }
-        else { data[fn.id] = document.getElementById(fn.id).value; }
-      });
-      store(formId, data);
-      (hideIds||[]).forEach(id=>{const el=document.getElementById(id); if(el) el.style.display='none';});
-      f.style.display='none';
-      const d = document.getElementById(doneId); if(d) d.style.display='block';
+      send({ typ:'Email', email:document.getElementById(inputId).value, zdroj:zdroj });
+      done(formId, doneId, hideIds);
     });
   }
-  handle('emailForm', [{id:'email'}], 'emailDone', ['emailMicro']);
-  handle('emailForm2', [{id:'email2'}], 'emailDone2', []);
-  handle('surveyForm', [{id:'surveyEmail'},{name:'q1',radio:true},{name:'q2',radio:true},{name:'q3',radio:true}], 'surveyDone', []);
+  onEmail('emailForm', 'email', 'emailDone', ['emailMicro'], 'Hlavný formulár (hero)');
+  onEmail('emailForm2', 'email2', 'emailDone2', [], 'Koniec stránky');
 
-  // klik na cenový plán = silný signál záujmu, uložíme a pošleme na zber emailu
+  var sf=document.getElementById('surveyForm');
+  if(sf){
+    sf.addEventListener('submit', function(e){
+      e.preventDefault();
+      function pick(name){ var s=sf.querySelector('input[name="'+name+'"]:checked'); return s?s.value:''; }
+      send({
+        typ:'Dotazník',
+        email:document.getElementById('surveyEmail').value,
+        q1:lbl('q1', pick('q1')),
+        q2:lbl('q2', pick('q2')),
+        q3:lbl('q3', pick('q3')),
+        zdroj:'Dotazník'
+      });
+      done('surveyForm', 'surveyDone', []);
+    });
+  }
+
+  // klik na cenovy plan = silny signal zaujmu
   function pickPlan(plan){
-    store('planClicks', {plan:plan});
-    var sec = document.getElementById('emailForm2');
+    send({ typ:'Klik na cenu', plan:lbl('plan', plan), zdroj:'Cenník' });
+    var sec=document.getElementById('emailForm2');
     if(sec){
       sec.scrollIntoView({behavior:'smooth', block:'center'});
-      var inp = document.getElementById('email2');
+      var inp=document.getElementById('email2');
       if(inp) setTimeout(function(){ inp.focus(); }, 450);
     }
   }
