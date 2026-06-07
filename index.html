@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Kniha života</title>
+<title>Cesta detstvom</title>
 <meta name="description" content="Hotové nápady, čo robiť s dieťaťom. A z každého spoločného momentu sa ti sama poskladá kniha života tvojho dieťaťa." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,9 +55,19 @@
   .capsule .em{color:var(--gold);font-weight:600;font-style:italic;font-family:'Fraunces',serif}
 
   /* PHONE MOCKUP */
-  .mockwrap{display:flex;justify-content:center;margin:6px 0 20px}
-  .mockphone{width:262px;background:#1c140d;border-radius:34px;padding:9px;box-shadow:0 30px 60px -28px rgba(60,40,20,.7)}
-  .mockscreen{background:var(--cream);border-radius:26px;padding:16px 14px}
+  .mockwrap{display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin:6px 0 12px}
+  .mockcol{display:flex;flex-direction:column;align-items:center;gap:9px}
+  .mockcap{font-size:13px;font-weight:600;color:var(--ink-soft)}
+  .mockphone{width:197px;background:#1c140d;border-radius:30px;padding:8px;box-shadow:0 26px 52px -28px rgba(60,40,20,.7)}
+  .mockscreen{background:var(--cream);border-radius:24px;padding:13px 11px;min-height:316px}
+  .mline{font-size:11px;color:var(--ink-soft)}
+  .mentry{background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden;margin-bottom:9px}
+  .mentry .mp{height:64px;display:grid;place-items:center;font-size:28px}
+  .mentry .mb{padding:7px 10px}
+  .mentry .md{font-size:10px;color:var(--ink-soft)}
+  .mentry .mt2{font-family:'Fraunces',serif;font-weight:600;font-size:13px}
+  .mchips{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+  .mchip{font-size:10px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:var(--ink-soft)}
   .mtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
   .msmall{font-size:10px;color:var(--ink-soft)}
   .mname{font-family:'Fraunces',serif;font-weight:600;font-size:15px}
@@ -112,6 +122,13 @@
   .ctaband h2{font-size:27px;margin-bottom:10px}
   .ctaband p{color:var(--ink-soft);max-width:480px;margin:0 auto 22px;font-size:15.5px}
 
+  /* PRIVACY */
+  .privacy{display:flex;gap:18px;align-items:center;background:linear-gradient(150deg,#FFF7EC,#F6E7D5);border:1px solid #f0dcc6;border-radius:var(--radius);padding:26px 28px;max-width:620px;margin:0 auto;box-shadow:var(--shadow)}
+  .privacy .picon{font-size:38px;flex-shrink:0}
+  .privacy h3{font-size:21px;margin-bottom:6px}
+  .privacy p{font-size:15px;color:var(--ink-soft)}
+  @media(max-width:480px){.privacy{flex-direction:column;text-align:center;gap:10px}}
+
   /* SURVEY */
   .survey{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:30px 24px;box-shadow:var(--shadow)}
   .q{margin-bottom:22px}
@@ -133,17 +150,12 @@
   <!-- HERO -->
   <header class="hero">
     <div class="wrap">
-      <span class="pill">Pre rodičov detí od 2 do 6 rokov</span>
-      <h1>Kniha života</h1>
+      <h1>Cesta detstvom</h1>
       <p class="motto">„Detstvo neodložíš. Spomienky áno."</p>
       <p class="sub">Dáme ti hotové nápady, čo robiť s dieťaťom. A z každého spoločného momentu sa ti sama poskladá kniha života tvojho dieťaťa. Aby ti tie roky neutiekli len tak.</p>
 
-      <form class="capture" id="emailForm">
-        <input type="email" id="email" placeholder="tvoj@email.sk" required />
-        <button class="btn" type="submit">Chcem to vyskúšať medzi prvými</button>
-      </form>
-      <p class="micro" id="emailMicro">Appku ešte len dokončujeme. Nechaj nám email a ozveme sa ti, keď bude hotová. Spam ti posielať nebudeme.</p>
-      <div class="formdone" id="emailDone">Ďakujeme, máme ťa v zozname. Ozveme sa hneď, ako spustíme. 💛</div>
+      <button class="btn" onclick="toSurvey()" style="font-size:17px;padding:16px 30px">Chcem to vyskúšať medzi prvými</button>
+      <p class="micro">Appku ešte len dokončujeme. Nechaj nám email v krátkom dotazníku a ozveme sa ti medzi prvými. Spam ti posielať nebudeme.</p>
     </div>
   </header>
 
@@ -163,23 +175,55 @@
       <h2 class="title">Takto to vyzerá</h2>
       <p class="lead">Otvoríš, splníš úlohu, pridáš fotku. Zvyšok spraví appka za teba.</p>
       <div class="mockwrap">
-        <div class="mockphone">
-          <div class="mockscreen">
+
+        <div class="mockcol">
+          <div class="mockphone"><div class="mockscreen">
             <div class="mtop">
               <div><div class="msmall">Dobré ráno 👋</div><div class="mname">Elina kniha</div></div>
               <div class="mstar">⭐ 24</div>
             </div>
             <div class="mtask">
               <div class="mlabel">Úloha týždňa</div>
-              <div class="mtitle">Nájdite spolu 3 žlté veci</div>
+              <div class="mtitle">Postavte prvý bunker</div>
               <div class="mbtn">Splniť úlohu</div>
             </div>
             <div class="mbookrow">
               <div class="mphoto" style="background:linear-gradient(145deg,#E8F0DF,#D4E4C4)">🌱</div>
               <div class="mphoto" style="background:linear-gradient(145deg,#FBE3CE,#F6CFB2)">🎨</div>
             </div>
-          </div>
+          </div></div>
+          <div class="mockcap">Ako to funguje</div>
         </div>
+
+        <div class="mockcol">
+          <div class="mockphone"><div class="mockscreen">
+            <div class="mtop">
+              <div class="mname">Kniha života</div>
+              <div class="mstar">📖</div>
+            </div>
+            <div class="mentry"><div class="mp" style="background:linear-gradient(145deg,#FBE3CE,#F6CFB2)">🎂</div><div class="mb"><div class="md">pred mesiacom</div><div class="mt2">Prvé narodeniny</div></div></div>
+            <div class="mentry"><div class="mp" style="background:linear-gradient(145deg,#E3ECF5,#CBDDF0)">👣</div><div class="mb"><div class="md">pred 2 mesiacmi</div><div class="mt2">Prvý krok</div></div></div>
+            <div class="mentry" style="margin-bottom:0"><div class="mp" style="background:linear-gradient(145deg,#F5E6C8,#EBD29B)">🎤</div><div class="mb"><div class="md">pred 3 mesiacmi</div><div class="mt2">Prvé slovo</div></div></div>
+          </div></div>
+          <div class="mockcap">Ukážka spomienky</div>
+        </div>
+
+        <div class="mockcol">
+          <div class="mockphone"><div class="mockscreen">
+            <div class="mtop">
+              <div class="mname">Aktivita</div>
+              <div class="mstar">⭐ +3</div>
+            </div>
+            <div class="mtask" style="margin-bottom:10px">
+              <div class="mlabel">Tento víkend</div>
+              <div class="mtitle">Upečte prvú pizzu</div>
+              <p style="font-size:11px;color:var(--ink-soft);margin:6px 0 10px">Spolu vymiesime cesto, dáme naň, čo máte radi, a upečieme. Nezabudni odfotiť. 🍕</p>
+              <div class="mchips"><span class="mchip">⏱️ 45 min</span><span class="mchip">🏠 Doma</span></div>
+            </div>
+          </div></div>
+          <div class="mockcap">Ukážka aktivity</div>
+        </div>
+
       </div>
       <p class="mocknote">A pekná drobnosť: appka sa oblečie do farieb tvojho dieťatka. <b>Pre dievčatko jemná a teplá, pre chlapca modrozelená.</b></p>
     </div>
@@ -193,15 +237,15 @@
       <div class="steps">
         <div class="step">
           <div class="ic">🎯</div>
-          <div><h3>1. Dostaneš nápad</h3><p>Párkrát do týždňa ti pošleme jednoduchú aktivitu z vecí, čo máš doma. Napríklad nájdite tri žlté veci alebo zasaďte semienko. Nič nevymýšľaš.</p></div>
+          <div><h3>1. Dostaneš nápad</h3><p>Párkrát do týždňa ti pošleme konkrétny zážitok, čo spolu podniknúť. Napríklad postavte prvý bunker alebo upečte prvú pizzu. Nič nevymýšľaš.</p></div>
         </div>
         <div class="step">
           <div class="ic">📸</div>
           <div><h3>2. Splníte to spolu</h3><p>Spravíte ju spolu, odklikneš a pridáš fotku alebo video. Dieťa za to zbiera hviezdičky a hneď pýta ďalšiu.</p></div>
         </div>
         <div class="step">
-          <div class="ic">📖</div>
-          <div><h3>3. Ostane vám spomienka</h3><p>Každá splnená úloha sa sama uloží do knihy života. O rok budeš mať poklad. O desať rokov niečo, čo sa nedá kúpiť.</p></div>
+          <div class="ic">⭐</div>
+          <div><h3>3. Zbierajte hviezdičky</h3><p>Každá splnená úloha je hviezdička pre dieťa. Keď ich za rok nazbierate dosť, odomkne sa kniha života za ten rok. Online ju máš zadarmo, krásnu tlačenú si vieš objednať domov.</p></div>
         </div>
       </div>
     </div>
@@ -211,19 +255,22 @@
   <section class="block alt">
     <div class="wrap">
       <h2 class="title">Tisíce nápadov, čo zažiť spolu</h2>
-      <p class="lead">Rodičia sa často boja, že toho s deťmi málo zažijú. S Knihou života ti nápady nikdy nedôjdu. Pár ukážok, čo vás čaká:</p>
+      <p class="lead">Rodičia sa často boja, že toho s deťmi málo zažijú. Nečakajú ťa suché jednovetové úlohy, ale konkrétne zážitky a prvé razy, pri ktorých čas pekne ubehne. Pár ukážok:</p>
       <div class="acts">
-        <span class="act">🟡 Nájdite tri žlté veci</span>
-        <span class="act">🌱 Zasaďte semienko</span>
-        <span class="act">💦 Skočte do mláky</span>
-        <span class="act">🧁 Upečte koláčiky</span>
-        <span class="act">🏰 Bunker z vankúšov</span>
-        <span class="act">🍂 Nazbierajte lístky</span>
-        <span class="act">👵 Návšteva babky</span>
-        <span class="act">🦆 Nakŕmte kačky</span>
-        <span class="act">🎨 Nakreslite rodinu</span>
-        <span class="act">🔦 Večerná hra s baterkou</span>
-        <span class="act">🇬🇧 Naučte sa „Hello!"</span>
+        <span class="act">🏰 Postavte svoj prvý spoločný bunker</span>
+        <span class="act">🍕 Upečte svoju prvú pizzu</span>
+        <span class="act">🌙 Prvé prespatie u babky</span>
+        <span class="act">🌲 Prvý výlet do lesa</span>
+        <span class="act">⛺ Postavte stan v obývačke a spite v ňom</span>
+        <span class="act">💦 Skočte spolu do mláky</span>
+        <span class="act">🥞 Napečte palacinky a zjedzte ich v posteli</span>
+        <span class="act">🔦 Večerná výprava s baterkou</span>
+        <span class="act">🐑 Výlet na farmu za zvieratkami</span>
+        <span class="act">🚲 Prvá jazda na bicykli</span>
+        <span class="act">🦆 Nakŕmte kačky v parku</span>
+        <span class="act">🏖️ Prvá letná dovolenka</span>
+        <span class="act">⛄ Prvá zimná dovolenka</span>
+        <span class="act">🛏️ Prvé prespatie mimo domu</span>
         <span class="act">⭐ A mnoho ďalších</span>
       </div>
       <p class="smallnote">A každý týždeň pribúdajú nové.</p>
@@ -255,37 +302,26 @@
         <div class="c"><div class="ic">🧠</div><h3>Nemusíš nič vymýšľať</h3><p>Koniec pocitu, že musíš stále vyťahovať nové hry, aby sa dieťa nenudilo.</p></div>
         <div class="c"><div class="ic">🔒</div><h3>Nič sa nestratí</h3><p>Aj keby si prišla o telefón, spomienky ostanú u nás v bezpečí.</p></div>
         <div class="c"><div class="ic">👨‍👩‍👧</div><h3>Celá rodina pri tom</h3><p>Otec aj babka môžu pridávať svoje fotky. Ty rozhoduješ, kto čo uvidí.</p></div>
-        <div class="c"><div class="ic">🎁</div><h3>Na konci kniha do ruky</h3><p>Z roka spomienok ti spravíme krásnu tlačenú knihu a pošleme ju domov.</p></div>
+        <div class="c"><div class="ic">🎁</div><h3>Kniha na konci roka</h3><p>Online verziu máš zadarmo. Krásnu tlačenú knihu si vieš objednať domov.</p></div>
       </div>
     </div>
   </section>
 
-  <!-- PRICING -->
+  <!-- PRIVACY -->
   <section class="block">
     <div class="wrap">
-      <h2 class="title">Koľko to bude stáť</h2>
-      <p class="lead">Vyskúšaš ju zadarmo. Platíš až vtedy, keď ti naozaj sadne. Klikni na plán, ktorý by ti sedel.</p>
-      <div class="prices">
-        <div class="price best" onclick="pickPlan('rocne')">
-          <div class="ribbon">Výhodné</div>
-          <div class="pp">7 dní zadarmo</div>
-          <div class="ps">potom 29,99 € / rok</div>
-        </div>
-        <div class="price" onclick="pickPlan('mesacne')">
-          <div class="pp">3 dni zadarmo</div>
-          <div class="ps">potom 4,99 € / mesiac</div>
-        </div>
-        <div class="price" onclick="pickPlan('dozivotne')">
-          <div class="pp">Doživotné predplatné</div>
-          <div class="ps">89,99 € jednorazovo</div>
+      <div class="privacy">
+        <div class="picon">🔒</div>
+        <div>
+          <h3>Súkromie na prvom mieste</h3>
+          <p>Čo nahráš, vidíš len ty a rodina, ktorú sám pozveš. Fotky a videá tvojho dieťaťa nikto cudzí neuvidí ani nepoužije. Všetko je bezpečne uložené a v súlade s GDPR.</p>
         </div>
       </div>
-      <p class="pricenote">Tlačenú knihu spomienok na konci roka si vieš doobjednať zvlášť.</p>
     </div>
   </section>
 
   <!-- SURVEY -->
-  <section class="block alt">
+  <section class="block alt" id="dotaznik">
     <div class="wrap">
       <h2 class="title">Pomôž nám to spraviť dobre</h2>
       <p class="lead">Stačí pol minúty. Podľa tvojich odpovedí sa rozhodneme, čo spravíme ako prvé.</p>
@@ -313,7 +349,6 @@
         <div class="q">
           <p class="qt">3. Koľko by si za to dala mesačne?</p>
           <div class="opts">
-            <label class="opt"><input type="radio" name="q3" value="0"> Len keď je zadarmo</label>
             <label class="opt"><input type="radio" name="q3" value="3"> Do 3 €</label>
             <label class="opt"><input type="radio" name="q3" value="35"> 3 až 5 €</label>
             <label class="opt"><input type="radio" name="q3" value="5+"> Viac ako 5 €</label>
@@ -330,19 +365,15 @@
     <div class="wrap">
       <div class="ctaband">
         <h2>Buď pri tom od začiatku</h2>
-        <p>Sme malý slovenský tím a appku staviame s láskou. Kto sa prihlási teraz, vyskúša ju ako jeden z prvých, ešte kým je zadarmo.</p>
-        <form class="capture" id="emailForm2">
-          <input type="email" id="email2" placeholder="tvoj@email.sk" required />
-          <button class="btn" type="submit">Daj mi vedieť pri spustení</button>
-        </form>
-        <div class="formdone" id="emailDone2" style="margin-top:14px">Ďakujeme, ozveme sa ti. 💛</div>
+        <p>Sme malý slovenský tím a appku staviame s láskou. Kto sa prihlási teraz, vyskúša ju ako jeden z prvých.</p>
+        <button class="btn" onclick="toSurvey()">Chcem byť pri tom</button>
       </div>
     </div>
   </section>
 
   <footer>
     <div class="wrap">
-      <div class="name">Kniha života</div>
+      <div class="name">Cesta detstvom</div>
       <p style="margin-top:8px">Robíme to s <span class="heart">♥</span> na Slovensku. Práve pripravujeme.</p>
     </div>
   </footer>
@@ -370,16 +401,8 @@
     var d=document.getElementById(doneId); if(d) d.style.display='block';
   }
 
-  function onEmail(formId, inputId, doneId, hideIds, zdroj){
-    var f=document.getElementById(formId); if(!f) return;
-    f.addEventListener('submit', function(e){
-      e.preventDefault();
-      send({ typ:'Email', email:document.getElementById(inputId).value, zdroj:zdroj });
-      done(formId, doneId, hideIds);
-    });
-  }
-  onEmail('emailForm', 'email', 'emailDone', ['emailMicro'], 'Hlavný formulár (hero)');
-  onEmail('emailForm2', 'email2', 'emailDone2', [], 'Koniec stránky');
+  // jeden bod na zber emailu = dotazník; tlačidlá naň len skrolujú
+  function toSurvey(){ var s=document.getElementById('dotaznik'); if(s) s.scrollIntoView({behavior:'smooth'}); }
 
   var sf=document.getElementById('surveyForm');
   if(sf){
@@ -398,16 +421,6 @@
     });
   }
 
-  // klik na cenovy plan = silny signal zaujmu
-  function pickPlan(plan){
-    send({ typ:'Klik na cenu', plan:lbl('plan', plan), zdroj:'Cenník' });
-    var sec=document.getElementById('emailForm2');
-    if(sec){
-      sec.scrollIntoView({behavior:'smooth', block:'center'});
-      var inp=document.getElementById('email2');
-      if(inp) setTimeout(function(){ inp.focus(); }, 450);
-    }
-  }
 </script>
 </body>
 </html>
