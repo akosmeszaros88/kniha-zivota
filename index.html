@@ -354,8 +354,16 @@
             <label class="opt"><input type="radio" name="q3" value="5+"> Viac ako 5 €</label>
           </div>
         </div>
+        <div class="q">
+          <p class="qt">Máš nápad alebo poznámku? <span style="font-weight:400;color:var(--ink-soft)">(nepovinné)</span></p>
+          <textarea id="poznamka" rows="3" placeholder="Čo by si na takej appke chcela, alebo čo by ti pomohlo?" style="width:100%;padding:13px 14px;border:1.5px solid #ecddcd;border-radius:12px;font-size:15px;font-family:inherit;background:#fff;color:var(--ink);resize:vertical"></textarea>
+        </div>
         <button class="btn" type="submit" style="width:100%">Odoslať</button>
-        <div class="surveydone" id="surveyDone" style="margin-top:16px">Ďakujeme, že nám pomáhaš. 💛</div>
+        <div class="surveydone" id="surveyDone" style="margin-top:16px">
+          <div style="font-size:40px;line-height:1">✅</div>
+          <div style="font-family:'Fraunces',serif;font-size:22px;font-weight:600;margin:8px 0 4px">Odoslané, ďakujeme!</div>
+          <div>Máme tvoje odpovede aj email. Ozveme sa ti hneď, ako spustíme Cesta detstvom. 💛</div>
+        </div>
       </form>
     </div>
   </section>
@@ -398,7 +406,7 @@
   function done(formId, doneId, hideIds){
     (hideIds||[]).forEach(function(id){ var el=document.getElementById(id); if(el) el.style.display='none'; });
     var f=document.getElementById(formId); if(f) f.style.display='none';
-    var d=document.getElementById(doneId); if(d) d.style.display='block';
+    var d=document.getElementById(doneId); if(d){ d.style.display='block'; d.scrollIntoView({behavior:'smooth', block:'center'}); }
   }
 
   // jeden bod na zber emailu = dotazník; tlačidlá naň len skrolujú
@@ -415,6 +423,7 @@
         q1:lbl('q1', pick('q1')),
         q2:lbl('q2', pick('q2')),
         q3:lbl('q3', pick('q3')),
+        poznamka:document.getElementById('poznamka').value,
         zdroj:'Dotazník'
       });
       done('surveyForm', 'surveyDone', []);
