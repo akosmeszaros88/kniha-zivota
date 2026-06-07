@@ -389,6 +389,9 @@
 <script>
   var WEBHOOK = 'https://akosmeszaros88.app.n8n.cloud/webhook/kniha-zivota-zber';
 
+  // zaznamenaj navstevu (pre meranie konverzie)
+  try { fetch('https://akosmeszaros88.app.n8n.cloud/webhook/cesta-detstvom-navsteva', { method:'POST', mode:'no-cors', body:new URLSearchParams({ zdroj:'Web' }) }); } catch(e){}
+
   // odoslanie na n8n webhook (fire-and-forget, bez CORS problemov)
   function send(data){
     try { fetch(WEBHOOK, { method:'POST', mode:'no-cors', body:new URLSearchParams(data) }); } catch(e){}
